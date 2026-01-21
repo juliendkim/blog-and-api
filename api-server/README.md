@@ -84,3 +84,53 @@ npm start
 - `content`
 - `user_id` (FK -> users.id)
 - `created_at`
+
+### 테이블 생성
+#### users 테이블 생성
+```sql
+-- PostgreSQL에 접속
+psql -U postgres -d memo_db
+
+-- users 테이블 생성
+CREATE TABLE users (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    username VARCHAR(100) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 인덱스 생성 (검색 성능 향상)
+CREATE INDEX idx_users_email ON users(email);
+```
+
+#### posts 테이블 생성 (블로그 게시글)
+```sql
+-- updated_at 자동 업데이트 함수 생성 (아직 없는 경우)
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- posts 테이블 생성
+CREATE TABLE posts (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    content TEXT NOT NULL,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 인덱스 생성
+CREATE INDEX idx_posts_user_id ON posts(user_id);
+
+-- updated_at 트리거 적용
+CREATE TRIGGER update_posts_updated_at
+    BEFORE UPDATE ON posts
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+```
