@@ -1,0 +1,29 @@
+###
+GET http://localhost:3000/memo
+
+###
+GET http://localhost:3000/memos
+
+###
+GET http://localhost:3000/memos/1
+
+###
+POST http://localhost:3000/memos
+Content-Type: application/json
+
+{
+    "title": "Test Memo",
+    "content": "This is a test memo."
+}
+
+###
+PUT http://localhost:3000/memos/5
+Content-Type: application/json
+
+{
+    "title": "Updated Memo",
+    "content": "This is an updated memo."
+}
+
+###
+DELETE http://localhost:3000/memos/3
