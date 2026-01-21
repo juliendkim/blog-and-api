@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ function Register() {
   });
   const [error, setError] = useState('');
   const { register } = useAuth();
+  const { addNotification } = useNotification();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,11 +28,13 @@ function Register() {
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
+      addNotification('Passwords do not match', 'error');
       return;
     }
 
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters');
+      addNotification('Password must be at least 6 characters', 'error');
       return;
     }
 
@@ -41,10 +45,11 @@ function Register() {
     );
 
     if (result.success) {
-      alert("Registration successful! Please login.");
+      addNotification('회원가입 성공! 로그인해주세요.', 'success');
       navigate('/login');
     } else {
       setError(result.error);
+      addNotification(result.error, 'error');
     }
   };
 

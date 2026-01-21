@@ -4,23 +4,89 @@
   box-sizing: border-box;
 }
 
+/* Light Theme */
+.App[data-theme="light"] {
+  --bg-color: #f5f5f5; /* Changed from #ffffff to match original body bg */
+  --text-color: #333333;
+  --text-secondary: #666666;
+  --card-bg: #ffffff; /* Changed from #f9f9f9 to match original card bg */
+  --border-color: #dddddd;
+  --navbar-bg: #333333; /* Keep original navbar look in light mode? Or invert? Original was dark navbar. Let's keep it dark for light mode if that was the design, OR make it light. Standard light theme usually has light navbar. Let's stick to the VARIABLES provided in the file originally, but tweak them if they were wrong.
+  
+  Wait, the original CSS had:
+  .navbar { background-color: #333; color: white; }
+  
+  But the provided variables for light theme were:
+  --navbar-bg: #ffffff;
+  
+  If I switch to var(--navbar-bg), the navbar becomes white in light mode. This is a visual change but likely intended for a "theme" system. I will proceed with the variables AS DEFINED in the previous turn's file content, assuming they are the desired "Light Theme" spec. */
+  --navbar-bg: #ffffff;
+  --navbar-text: #333333;
+  --navbar-shadow: rgba(0, 0, 0, 0.1);
+  
+  --button-primary-bg: #007bff;
+  --button-primary-hover: #0056b3;
+  --button-secondary-bg: #6c757d;
+  --button-secondary-hover: #545b62;
+  --button-danger-bg: #dc3545;
+  --button-danger-hover: #c82333;
+  
+  --input-bg: #ffffff;
+  --input-border: #ced4da;
+  --input-focus-border: #80bdff;
+  
+  --link-color: #007bff;
+  --link-hover: #0056b3;
+}
+
+/* Dark Theme */
+.App[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --text-secondary: #aaaaaa;
+  --card-bg: #1e1e1e;
+  --border-color: #333333;
+  --navbar-bg: #1e1e1e;
+  --navbar-text: #e0e0e0;
+  --navbar-shadow: rgba(0, 0, 0, 0.3);
+  
+  --button-primary-bg: #0d6efd;
+  --button-primary-hover: #0b5ed7;
+  --button-secondary-bg: #495057;
+  --button-secondary-hover: #343a40;
+  --button-danger-bg: #dc3545;
+  --button-danger-hover: #bb2d3b;
+  
+  --input-bg: #2c2c2c;
+  --input-border: #444444;
+  --input-focus-border: #0d6efd;
+  
+  --link-color: #4dabf7;
+  --link-hover: #339af0;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  background-color: #f5f5f5;
+  /* background-color handled in .App to use variables */
+  background-color: var(--bg-color, #f5f5f5); /* Fallback */
 }
 
 .App {
   min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Navbar */
 .navbar {
-  background-color: #333;
-  color: white;
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
   padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--navbar-shadow);
+  transition: background-color 0.3s ease;
 }
 
 .navbar-container {
@@ -35,7 +101,7 @@ body {
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: bold;
-  color: white;
+  color: var(--navbar-text);
   text-decoration: none;
 }
 
@@ -46,19 +112,21 @@ body {
 }
 
 .navbar-item {
-  color: white;
+  color: var(--navbar-text);
   text-decoration: none;
   cursor: pointer;
 }
 
 .navbar-item:hover {
-  color: #ddd;
+  opacity: 0.8;
 }
 
 .navbar-item.btn {
   background: none;
   border: none;
   font-size: 1rem;
+  padding: 0; /* Reset padding for icon btn */
+  color: var(--navbar-text);
 }
 
 /* Container */
@@ -73,7 +141,7 @@ body {
   text-align: center;
   padding: 2rem;
   font-size: 1.2rem;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 /* Buttons */
@@ -86,39 +154,37 @@ body {
   text-decoration: none;
   display: inline-block;
   transition: background-color 0.3s;
+  color: white; /* Most buttons have white text */
 }
 
 .btn-primary {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--button-primary-bg);
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: var(--button-primary-hover);
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background-color: var(--button-secondary-bg);
 }
 
 .btn-secondary:hover {
-  background-color: #545b62;
+  background-color: var(--button-secondary-hover);
 }
 
 .btn-danger {
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--button-danger-bg);
 }
 
 .btn-danger:hover {
-  background-color: #c82333;
+  background-color: var(--button-danger-hover);
 }
 
 /* Home Page */
 .home h1 {
   margin-bottom: 2rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 .posts-list {
@@ -127,27 +193,29 @@ body {
 }
 
 .post-card {
-  background: white;
+  background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--navbar-shadow);
+  border: 1px solid var(--border-color); /* Added for better definition in dark mode */
 }
 
 .post-card h2 {
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 .post-meta {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
 .post-excerpt {
-  color: #333;
+  color: var(--text-color);
   line-height: 1.6;
   margin-bottom: 1rem;
+  white-space: pre-wrap;
 }
 
 .post-actions {
@@ -160,14 +228,15 @@ body {
   max-width: 400px;
   margin: 2rem auto;
   padding: 2rem;
-  background: white;
+  background: var(--card-bg);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--navbar-shadow);
+  border: 1px solid var(--border-color);
 }
 
 .auth-container h2 {
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--text-color);
   text-align: center;
 }
 
@@ -185,25 +254,27 @@ body {
 
 .form-group label {
   font-weight: 500;
-  color: #333;
+  color: var(--text-color);
 }
 
 .form-group input,
 .form-group textarea {
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--input-border);
   border-radius: 4px;
   font-size: 1rem;
+  background-color: var(--input-bg);
+  color: var(--text-color);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--input-focus-border);
 }
 
 .error-message {
-  background-color: #f8d7da;
+  background-color: #f8d7da; /* Keep standard error colors */
   color: #721c24;
   padding: 0.75rem;
   border-radius: 4px;
@@ -213,16 +284,17 @@ body {
 .auth-link {
   text-align: center;
   margin-top: 1rem;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .auth-link a {
-  color: #007bff;
+  color: var(--link-color);
   text-decoration: none;
 }
 
 .auth-link a:hover {
   text-decoration: underline;
+  color: var(--link-hover);
 }
 
 /* Post Form */
@@ -235,14 +307,15 @@ body {
 .create-post h2,
 .edit-post h2 {
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 .post-form {
-  background: white;
+  background: var(--card-bg);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--navbar-shadow);
+  border: 1px solid var(--border-color);
 }
 
 .post-form .form-group {
@@ -258,4 +331,69 @@ body {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+}
+
+/* Notifications */
+.notifications-container {
+  position: fixed;
+  top: 64px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.notification {
+  pointer-events: auto;
+  padding: 16px 20px;
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 320px;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.4s cubic-bezier(0.16, 2, 0.3, 1);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.notification-success {
+  background-color: rgba(16, 185, 129, 0.95); /* Emerald 500 */
+  border-left: 4px solid #059669;
+}
+
+.notification-error {
+  background-color: rgba(239, 68, 68, 0.95); /* Red 500 */
+  border-left: 4px solid #b91c1c;
+}
+
+.notification-info {
+  background-color: rgba(59, 130, 246, 0.95); /* Blue 500 */
+  border-left: 4px solid #2563eb;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  margin-left: 16px;
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+
+.notification-close:hover {
+  color: #ffffff;
 }

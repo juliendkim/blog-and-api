@@ -28,7 +28,7 @@ DB_PORT=5432
 DB_USER=your_username
 DB_PASSWORD=your_password
 DB_NAME=your_database_name
-JWT_SECRET=your_jwt_secret_key
+JWT_SECRET_KEY=your_jwt_secret_key
 ```
 
 ### 설치 및 실행

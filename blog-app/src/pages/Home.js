@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import apiClient from '../utils/api';
 import { useAuth } from '../context/AuthContext';
@@ -50,28 +50,13 @@ function Home() {
           {posts.map(post => (
             <div key={post.id} className="post-card">
               <h2>{post.title}</h2>
-              <p className="post-meta">
-                By {post.username} on {new Date(post.created_at).toLocaleDateString()}
-              </p>
-              <p className="post-excerpt">
-                {post.content.length > 200 
-                  ? `${post.content.substring(0, 200)}...`
-                  : post.content
-                }
-              </p>
-              
+              <p className="post-meta">By {post.username} on {new Date(post.created_at).toLocaleDateString()}</p>
+              <p className="post-excerpt">{post.content.length > 200 ? `${post.content.substring(0, 200)}...` : post.content}</p>
               <div className="post-actions">
                 {user && Number(user.id) === Number(post.user_id) && (
                   <>
-                    <Link to={`/edit/${post.id}`} className="btn btn-secondary">
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(post.id)}
-                      className="btn btn-danger"
-                    >
-                      Delete
-                    </button>
+                    <Link to={`/edit/${post.id}`} className="btn btn-secondary">Edit</Link>
+                    <button onClick={() => handleDelete(post.id)} className="btn btn-danger">Delete</button>
                   </>
                 )}
               </div>

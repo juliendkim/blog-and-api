@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ function Login() {
   });
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const { addNotification } = useNotification();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,9 +27,10 @@ function Login() {
     const result = await login(formData.email, formData.password);
 
     if (result.success) {
+      addNotification('로그인 성공!', 'success');
       navigate('/');
     } else {
-      setError(result.error);
+      addNotification(result.error, 'error');
     }
   };
 
